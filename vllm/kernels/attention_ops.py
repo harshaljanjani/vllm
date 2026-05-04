@@ -85,11 +85,7 @@ def flash_attn_impl(
     bsz = query.size(0)
     head_size = query.size(-1)
     fa_version = get_flash_attn_version(head_size=head_size)
-    max_seqlen_t = (
-        torch.tensor(max_seqlen, device=query.device)
-        if max_seqlen is not None
-        else None
-    )
+    max_seqlen_t = torch.tensor(max_seqlen) if max_seqlen is not None else None
     return vit_flash_attn_wrapper(
         q=query,
         k=key,
@@ -128,11 +124,7 @@ def triton_impl(
     from vllm.v1.attention.ops.vit_attn_wrappers import vit_triton_attn_wrapper
 
     bsz = query.size(0)
-    max_seqlen_t = (
-        torch.tensor(max_seqlen, device=query.device)
-        if max_seqlen is not None
-        else None
-    )
+    max_seqlen_t = torch.tensor(max_seqlen) if max_seqlen is not None else None
     return vit_triton_attn_wrapper(
         q=query,
         k=key,
